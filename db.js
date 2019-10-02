@@ -23,6 +23,10 @@ Page.prototype.findChildren = async function() {
  return await Page.findAll({ where: { parentId: this.id } });
 };
 
+Page.prototype.hierarchy = async function() {
+
+};
+
 // Associations
 Page.hasMany(Page, { foreignKey: 'parentId' });
 
@@ -51,27 +55,35 @@ const syncAndSeed = async () => {
 
 };
 
-syncAndSeed()
-  .then(async ()=> {
-    const home = await Page.findHomePage();
-    //console.log(home);
-    console.log(home.title); // Home page
+module.exports = {
+  syncAndSeed,
+  models: {
+    Page
+  }
+};
 
-    const homeChildren = await home.findChildren();
-    console.log(homeChildren.map( page => page.title));
-    // [ About, Contact ]
+// syncAndSeed()
+//   .then(async ()=> {
+//     const home = await Page.findHomePage();
+//     //console.log(home);
+//     console.log(home.title); // Home page
 
-    const fax = await Page.findOne({ where: { title: 'Fax' } });
-    console.log(fax.title);
+//     const homeChildren = await home.findChildren();
+//     console.log(homeChildren.map( page => page.title));
+//     // [ About, Contact ]
 
-    // hierarch returns the page, parentPage, parent's parent.. etc.
-    let hier = await fax.hierarchy();
-    console.log(hier.map( page => page.title));
-    // ['Fax', 'Contact', 'Home']
+//     const fax = await Page.findOne({ where: { title: 'Fax' } });
+//     console.log(fax.title);
+//     //console.log(fax);
 
-  //    const history = await Page.findOne({ where: { title: 'About Our History'} });
-  //    hier = await history.hierarchy();
-  //    console.log(hier.map(page => page.title));
-  //    // ['About Our History', 'About', 'Home Page']
-  })
+//     // hierarch returns the page, parentPage, parent's parent.. etc.
+//     //let hier = await fax.hierarchy();
+//     //console.log(hier.map( page => page.title));
+//     // ['Fax', 'Contact', 'Home']
+
+//     // const history = await Page.findOne({ where: { title: 'About Our History'} });
+//     // hier = await history.hierarchy();
+//     // console.log(hier.map(page => page.title));
+//     // ['About Our History', 'About', 'Home Page']
+//   });
 
