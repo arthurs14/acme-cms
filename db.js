@@ -23,6 +23,10 @@ Page.prototype.findChildren = async function() {
  return await Page.findAll({ where: { parentId: this.id } });
 };
 
+Page.prototype.findSiblings = async function() {
+  return await Page.findAll({ where: { parentId: this.parentId } }).filter(page => page.id !== this.id);
+}
+
 Page.prototype.hierarchy = async function() {
 
 };
